@@ -1,0 +1,18 @@
+collection - JobPosts  
+document - AutoId
+values = {
+    jobDescription,
+    jobTitle,
+    createdAt,
+    
+}
+
+
+
+{
+    "email": "pegasus@mail.com",
+    "password": "2124124",
+    "confirmPassword": "pegasus@mail.com",
+    "username": "peggy"
+}
+
