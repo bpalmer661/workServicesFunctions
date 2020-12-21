@@ -7,7 +7,7 @@ exports.fbAuth = (req, res, next) => {
   ) {
     idToken = req.headers.authorization
   } else {
-    console.error('No token found');
+    console.error('ERROR No token found');
     return res.status(403).json({ error: 'Unauthorized' });
   }
 
@@ -29,3 +29,4 @@ admin.auth().verifyIdToken(idToken)
       return res.status(403).json(err);
     });
 };
+

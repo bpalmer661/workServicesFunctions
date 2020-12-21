@@ -4,7 +4,7 @@
 //npm i react-redux
 
 
-
+const { uuid } = require("uuidv4");
 
 
 const functions = require('firebase-functions');
@@ -12,15 +12,19 @@ const functions = require('firebase-functions');
 
 const app = require('express')();
 
+//lesson 35///// add getAuthenticatedUsersDetails///////
+const { signup, login, uploadImage,addUserDetails, getOurJobPosts,getUserDetails, markNotificationsAsRead,getAuthenticatedUsersDetails } = require('./handlers/users')
 
 
-const { getAllJobPosts,createJobPost,getJobPostAndReplys, replyToJobPost,deleteJobPost,deleteJobPostReply} = require('./handlers/jobPosts')
-
-
-const { signup, login, uploadImage,addUserDetails, getOurJobPosts,getUserDetails, markNotificationsAsRead } = require('./handlers/users')
+const { getAllJobPosts,createJobPost,getJobPostAndReplys, replyToJobPost,deleteJobPost,deleteJobPostReply,getAllJobPostsReplys} = require('./handlers/jobPosts')
 
 
 const { fbAuth } = require('./util/fbAuth');
+
+
+const cors = require('cors');
+app.use(cors());
+
 
 
 const { db } = require('./util/admin')
@@ -33,9 +37,7 @@ app.get('/JobPost/:jobPostId',getJobPostAndReplys)
 app.post('/JobPost/:jobPostId',fbAuth,replyToJobPost )
 app.delete('/JobPost/:jobPostId',fbAuth,deleteJobPost)
 app.delete('/deleteJobPostReply/:jobPostReplyId',fbAuth,deleteJobPostReply)
-
-
-
+app.get('/JobPostReplys/:jobPostId',fbAuth,getAllJobPostsReplys)
 
 
 
@@ -45,7 +47,8 @@ app.post('/signup', signup);
 app.post('/login',login);
 app.post('/user/image',fbAuth, uploadImage)
 app.post('/user',fbAuth,addUserDetails)
-app.get('/user',fbAuth,getOurJobPosts)
+app.get('/getOurJobPosts',fbAuth,getOurJobPosts)
+app.get('/user',fbAuth,getAuthenticatedUsersDetails)
 app.get('/user/:username',getUserDetails)
 app.post('/notifications',fbAuth,markNotificationsAsRead)
 
@@ -68,7 +71,7 @@ app.post('/notifications',fbAuth,markNotificationsAsRead)
     return db.collection("JobPosts").doc(`${snapshot.data().jobPostId}`)
       .get()
       .then((doc) => {
-        console.log("sender and reciever =" + doc.data().username + snapshot.data().username)
+        console.log("sender and reciever =" + doc.data().username + "" + snapshot.data().username)
         if (
           doc.exists &&
           doc.data().username !== snapshot.data().username
@@ -172,3 +175,5 @@ exports.onJobPostDelete = functions
 
       .catch((err) => console.error(err));
   });
+
+

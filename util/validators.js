@@ -10,6 +10,7 @@ const isEmail = (email) => {
     else return false;
   };
 
+  
 
   exports.validateSignUpData = (data) => {
 
@@ -38,7 +39,7 @@ const isEmail = (email) => {
   
   exports.validateLoginData = (data) => {
     let errors = {};
-  
+
     if (isEmpty(data.email)) errors.email = 'Must not be empty';
     if (isEmpty(data.password)) errors.password = 'Must not be empty';
   
@@ -49,16 +50,26 @@ const isEmail = (email) => {
   };
   
   
+
+
+
   exports.reduceUserDetails = (data) => {
+
     let userDetails = {};
-  
+    
     if (!isEmpty(data.bio.trim())) userDetails.bio = data.bio;
+
+    ///////////lesson 27/////////////
+    if (!isEmpty(data.service.trim())) userDetails.service = data.service;
+    ///////////lesson 27/////////////
+
     if (!isEmpty(data.website.trim())) {
       // https://website.com
       if (data.website.trim().substring(0, 4) !== 'http') {
         userDetails.website = `http://${data.website.trim()}`;
       } else userDetails.website = data.website;
     }
+
     if (!isEmpty(data.location.trim())) userDetails.location = data.location;
   
     return userDetails;
